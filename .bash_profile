@@ -7,6 +7,8 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
+alias goapp="cd $GOPATH/src"
+
 # Meta
 alias ebash="subl ~/.bash_profile"
 alias rbash="source ~/.bash_profile"
@@ -22,6 +24,16 @@ alias pull="git pull"
 alias o="open ."
 alias c="clear"
 alias l="ls -lAhp"
+alias ~="cd ~"
 alias ..="cd .."
+alias mkdir="mkdir -pv "
+alias link="ln -s "
 alias epg="printenv | grep -i "
-alias goapp="cd $GOPATH/src"
+alias sneak="chmod 600 " # If you're sneaky... no one can see or do anything to you.
+alias ninja="chmod 700 " # Ninjas can sneak... and they are able to execute you too. 🤣
+alias myip="curl http://ipecho.net/plain; echo"
+
+mcd () {
+    mkdir $1
+    cd $1
+}
