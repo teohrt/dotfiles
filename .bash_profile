@@ -1,7 +1,7 @@
 # Sexy prompt with git branch integration
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 
-export PS1='⚡️\[\u(\e[0;36m\]\W\e[m)\e[1;32m\[$(__git_ps1)\]\e[m\]→ '
+export PS1='⚡️\u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
