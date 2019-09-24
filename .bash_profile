@@ -1,7 +1,7 @@
 # Sexy prompt with git branch integration
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 
-export PS1="\n⚡️teo(\e[0;36m\W\e[m)\e[1;32m\$(__git_ps1)\e[m→ "
+export PS1='⚡️\[\u(\e[0;36m\]\W\e[m)\e[1;32m\[$(__git_ps1)\]\e[m\]→ '
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
@@ -23,19 +23,26 @@ alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
 
-# Misc
+# Preferred options
+alias mv='mv -v'
+alias rm='rm -i -v'
+alias cp='cp -v'
+alias grep="grep --ignore-case --color=auto"
+alias mkdir="mkdir -pv "
+alias link="ln -s "
+
+# Miscellaneous
+alias ~="cd ~"
+alias ..="cd .."
+alias ...="cd ../.."
 alias o="open ."
 alias c="clear"
 alias l="ls -lAhp"
-alias ~="cd ~"
-alias ..="cd .."
-alias mkdir="mkdir -pv "
-alias link="ln -s "
-alias grep='grep --color=auto -i'
+alias ninja="chmod 700 "
+alias sneak="chmod 600 "
 alias epg="printenv | grep "
-alias sneak="chmod 600 " # If you're sneaky... no one can see or do anything to you.
-alias ninja="chmod 700 " # Ninjas can sneak... and they are able to execute you too. 🤣
-alias myip="curl http://ipecho.net/plain; echo"
+alias path='echo -e ${PATH//:/\\n}'
+alias myip="ipconfig getifaddr en0"
 
 mcd () {
     mkdir $1
