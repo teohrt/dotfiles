@@ -62,5 +62,9 @@ nukeD () {
 }
 
 wifipwd () {
-    security find-generic-password -ga "$1" | grep "password:"
+    if [ "$1" = '' ] ; then
+        echo Please specify a network
+    else
+        security find-generic-password -ga "$1" | grep "password:"
+    fi
 }
