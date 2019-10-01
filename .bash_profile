@@ -32,6 +32,7 @@ alias mkdir="mkdir -pv "
 alias link="ln -s "
 
 # Miscellaneous
+alias x="exit"
 alias ~="cd ~"
 alias ..="cd .."
 alias ...="cd ../.."
