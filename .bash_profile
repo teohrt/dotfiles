@@ -22,6 +22,7 @@ alias gs="git status"
 alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
+alias gch="git checkout "
 
 # Preferred options
 alias mv='mv -v'
@@ -31,11 +32,16 @@ alias grep="grep --ignore-case --color=auto"
 alias mkdir="mkdir -pv "
 alias link="ln -s "
 
-# Miscellaneous
-alias x="exit"
+# Navigation
 alias ~="cd ~"
+alias Downloads="cd ~/Downloads"
+alias Documents="cd ~/Documents"
+alias Dev="cd ~/Dev"
 alias ..="cd .."
 alias ...="cd ../.."
+alias x="exit"
+
+# Miscellaneous
 alias o="open ."
 alias c="clear"
 alias l="ls -lAhp"
