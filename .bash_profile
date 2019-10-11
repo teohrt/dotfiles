@@ -28,23 +28,25 @@ alias gch="git checkout "
 alias mv='mv -v'
 alias rm='rm -i -v'
 alias cp='cp -v'
+alias ls="ls -lAhp"
 alias grep="grep --ignore-case --color=auto"
 alias mkdir="mkdir -pv "
 alias link="ln -s "
 
 # Navigation
-alias ~="cd ~"
 alias Downloads="cd ~/Downloads"
 alias Documents="cd ~/Documents"
 alias Dev="cd ~/Dev"
+alias x="exit"
+alias ~="cd ~"
 alias ..="cd .."
 alias ...="cd ../.."
-alias x="exit"
 
 # Miscellaneous
 alias o="open ."
 alias c="clear"
-alias l="ls -lAhp"
+alias l="ls"
+alias cl="clear; ls"
 alias ninja="chmod 700 "
 alias sneak="chmod 600 "
 alias epg="printenv | grep "
