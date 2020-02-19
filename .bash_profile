@@ -1,6 +1,6 @@
-# Sexy prompt with git branch integration
+# Standard profile
+# ----------------
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-
 export PS1='⚡️\u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
@@ -18,56 +18,39 @@ alias rbash="source ~/.bash_profile"
 # Git
 alias push="git push"
 alias pull="git pull"
-alias gs="git status"
+alias gs="clear; git status"
 alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
 alias gch="git checkout "
+alias gh="open \`git remote -v | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//'\`"
 
 # Preferred options
 alias mv='mv -v'
 alias rm='rm -i -v'
 alias cp='cp -v'
-alias ls="ls -lAhp"
-alias grep="grep --ignore-case --color=auto"
+alias ls="ls -Aplhtr"
+alias grep="grep --ignore-case --color --line-number"
 alias mkdir="mkdir -pv "
-alias link="ln -s "
 
 # Navigation
-alias Downloads="cd ~/Downloads"
-alias Documents="cd ~/Documents"
-alias Dev="cd ~/Dev"
 alias x="exit"
-alias ~="cd ~"
-alias ..="cd .."
-alias ...="cd ../.."
+alias o="open ."
+alias ..="cd ..; clear; ls"
+alias ...="cd ../..; clear; ls"
+alias ~="cd ~; clear; ls"
+alias Downloads="cd ~/Downloads; clear; ls"
+alias Documents="cd ~/Documents; clear; ls"
+alias Dev="cd ~/Dev; clear; ls"
 
 # Miscellaneous
-alias o="open ."
 alias c="clear"
-alias l="ls"
-alias cl="clear; ls"
+alias l="clear; ls"
 alias ninja="chmod 700 "
 alias sneak="chmod 600 "
 alias epg="printenv | grep "
 alias path='echo -e ${PATH//:/\\n}'
 alias myip="ipconfig getifaddr en0"
-
-mcd () {
-    mkdir $1
-    cd $1
-}
-
-nukeD () {
-    if [ "$1" = '' ] ; then
-        echo Please specify a directory
-    else
-        rm -ri $1*
-        if [ $? -ne 0 ] ; then
-            echo You can\'t delete what isn\'t there...
-        fi
-    fi
-}
 
 wifipwd () {
     if [ "$1" = '' ] ; then
