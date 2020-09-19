@@ -1,5 +1,9 @@
 # Standard profile
 # ----------------
+
+# With Mac's default interactive shell now zsh, we'll want to silence the obnoxious message
+export BASH_SILENCE_DEPRECATION_WARNING=1
+
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 export PS1='⚡️\u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 export CLICOLOR=1
@@ -8,6 +12,9 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # Go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
+
+# Python
+alias python="python3"
 
 alias goapp="cd $GOPATH/src"
 
@@ -24,6 +31,16 @@ alias ga="git add . ; git status"
 alias gc="git commit -m "
 alias gch="git checkout "
 alias gh="open \`git remote -v | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//'\`"
+
+greset1 () {
+    echo Type \'yes\' if want to reset your git history by one commit:
+    read ans
+    if [ "$ans" = 'yes' ] ; then
+        git log -2 | grep commit | tail -1 | awk '{print $NF}' | xargs git reset
+    else
+        echo Aborting.
+    fi
+}
 
 # Preferred options
 alias mv='mv -v'
@@ -50,7 +67,9 @@ alias ninja="chmod 700 "
 alias sneak="chmod 600 "
 alias epg="printenv | grep "
 alias path='echo -e ${PATH//:/\\n}'
-alias myip="ipconfig getifaddr en0"
+alias ip="ipconfig getifaddr en0"
+alias mac="networksetup -getmacaddress en0"
+alias m='make'
 
 wifipwd () {
     if [ "$1" = '' ] ; then
