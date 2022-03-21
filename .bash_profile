@@ -1,11 +1,9 @@
 # Standard profile
 # ----------------
 
-# With Mac's default interactive shell now zsh, we'll want to silence the obnoxious message
-export BASH_SILENCE_DEPRECATION_WARNING=1
-
+export BASH_SILENCE_DEPRECATION_WARNING=1 # With Mac's default interactive shell now zsh, we'll want to silence the obnoxious message
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-export PS1='⚡️\u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
+export PS1='🪂 \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
@@ -16,13 +14,11 @@ export PATH=$PATH:$GOPATH/bin
 # Python
 alias python="python3"
 
-alias goapp="cd $GOPATH/src"
-
 # Meta
 alias ebash="subl ~/.bash_profile"
 alias rbash="source ~/.bash_profile"
 
-# Git
+# Dev Workflow
 alias push="git push"
 alias pull="git pull"
 alias gs="clear; git status"
@@ -39,6 +35,16 @@ greset1 () {
         git log -2 | grep commit | tail -1 | awk '{print $NF}' | xargs git reset
     else
         echo Aborting.
+    fi
+}
+
+scripts () {
+    if [ ! -e package.json ]; then
+      echo "Not a package.json in this directory"
+      exit -1
+    else
+      run_command="npm run $(jq '.scripts | keys[]' package.json | sed 's/"//g' | fzf)"
+      eval $run_command
     fi
 }
 
@@ -61,6 +67,7 @@ alias Documents="cd ~/Documents; clear; ls"
 alias Dev="cd ~/Dev; clear; ls"
 
 # Miscellaneous
+alias c.="code ."
 alias c="clear"
 alias l="clear; ls"
 alias ninja="chmod 700 "
@@ -70,6 +77,7 @@ alias path='echo -e ${PATH//:/\\n}'
 alias ip="ipconfig getifaddr en0"
 alias mac="networksetup -getmacaddress en0"
 alias m='make'
+alias big10='du -a -h ./ | sort -h -r | head -n 10'
 
 wifipwd () {
     if [ "$1" = '' ] ; then
