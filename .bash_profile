@@ -102,12 +102,12 @@ wifipwd () { # Retrieve wifi password - fuzzy match SSIDs if none is provided
 }
 
 fkill () { # Fuzzy matching process murder
-  local pid
-  pid=$(ps -ef | sed 1d | fzf -m | awk '{print $2}')
-
-  if [ "$pid" != "" ]
-  then
+  local process pid
+  process=$(ps -ef | sed 1d | fzf -m)
+  if [ "$process" != "" ] ; then
+    pid=$(echo "$process" | awk '{print $2}')
     echo $pid | xargs kill -${1:-9}
+    echo $process
   fi
 }
 
