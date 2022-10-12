@@ -31,14 +31,31 @@ alias rbash="source ~/.bash_profile"
 
 # Dev
 alias push="git push"
+alias pushF="git push --force"
 alias pull="git pull"
 alias stash="git stash --include-untracked"
+alias pop="git stash pop"
 alias gs="clear; git status"
 alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
 alias gh="open \`git remote -v | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//'\`"
 alias gchB="git checkout -B"
+
+gbD () { # git branch delete with fuzzy matching
+  local branches branchInfo branchName
+  branches=$(git --no-pager branch -vv) &&
+  branchInfo=$(echo "$branches" | fzf +m) && 
+  branchName=$(echo "$branchInfo" | awk '{print $1}' | sed "s/.* //")
+
+  echo Type \'yes\' if you want to delete "$branchName"
+  read ans
+  if [ "$ans" = 'yes' ] ; then
+    git branch -D $(echo "$branchName")
+  else
+      echo Aborting.
+  fi
+}
 
 gch () { # checkout git branch with fuzzy matching
   local branches branch
@@ -82,6 +99,7 @@ alias mv="mv -v"
 alias rm="rm -i -v"
 alias cp="cp -v"
 alias ls="ls -Aplhtr"
+
 alias grep="grep --ignore-case --color --line-number"
 alias mkdir="mkdir -pv "
 
