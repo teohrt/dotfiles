@@ -39,8 +39,19 @@ alias gs="clear; git status"
 alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
-alias gh="open \`git remote -v | grep fetch | head -1 | cut -f2 | cut -d' ' -f1 | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//'\`"
 alias gchB="git checkout -B"
+
+gh () { # open github branch specfic directory in web browser
+  local branch origin repoURL repoName repoDirectory url
+  branch=$(git rev-parse --abbrev-ref HEAD)
+  origin=$(git config --get remote.origin.url)
+  repoURL=$(echo $origin | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//')
+  repoURL+="/tree/$branch"
+  repoName=$(echo $origin | sed -e'0,/\//d' -e's/.*\///' -e's/\.git$//')
+  repoDirectory=$(pwd | sed "s/.*$repoName//")
+  url="$repoURL$repoDirectory"
+  open $url
+}
 
 gbD () { # git branch delete with fuzzy matching
   local branches branchInfo branchName
@@ -99,7 +110,6 @@ alias mv="mv -v"
 alias rm="rm -i -v"
 alias cp="cp -v"
 alias ls="ls -Aplhtr"
-
 alias grep="grep --ignore-case --color --line-number"
 alias mkdir="mkdir -pv "
 
