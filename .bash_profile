@@ -1,8 +1,12 @@
 # Standard profile
 # ----------------
-
+ 
 # With Mac's default interactive shell now zsh, we'll want to silence the obnoxious message
 export BASH_SILENCE_DEPRECATION_WARNING=1
+
+# M1 Mac 
+# eval "$(/opt/homebrew/bin/brew shellenv)"
+# DOCKER_DEFAULT_PLATFORM="linux/amd64"
 
 # Shell Personality
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
@@ -13,6 +17,9 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'
 
+# Python
+eval "$(pyenv init --path)"
+
 # Go
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
@@ -22,11 +29,8 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# Python
-alias python="python3"
-
 # Meta
-alias ebash="subl ~/.bash_profile"
+alias ebash="code ~/.bash_profile"
 alias rbash="source ~/.bash_profile"
 
 # Dev
@@ -127,6 +131,13 @@ fd() { # Fuzzy match directory navigation
   local dir
   dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m)
   cd "$dir"
+}
+
+fhistory() { # Fuzzy match shell history search and evaluation
+  local cmd
+  cmd=$(history | cut -c 8- | fzf)
+  echo "$cmd"
+  eval "$cmd"
 }
 
 # Miscellaneous
