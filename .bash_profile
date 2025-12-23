@@ -1,16 +1,19 @@
 # Standard profile
 # ----------------
  
+# M1 Mac Brew pathing
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+# M1 Mac docker
+DOCKER_DEFAULT_PLATFORM="linux/amd64"
+
 # With Mac's default interactive shell now zsh, we'll want to silence the obnoxious message
 export BASH_SILENCE_DEPRECATION_WARNING=1
 
-# M1 Mac 
-# eval "$(/opt/homebrew/bin/brew shellenv)"
-# DOCKER_DEFAULT_PLATFORM="linux/amd64"
-
 # Shell Personality
 source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-export PS1='🪂 \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
+# export PS1='🪂 \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
+export PS1='\[\]🪂 \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
@@ -19,6 +22,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob
 
 # Python
 eval "$(pyenv init --path)"
+alias activate="source .venv/bin/activate"
 
 # Go
 export GOPATH=$HOME/go
@@ -44,6 +48,8 @@ alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
 alias gchB="git checkout -B"
+
+export GPG_TTY=$(tty) # facilitate gpg signing for git commits
 
 gh () { # open github branch specfic directory in web browser
   local branch origin repoURL repoName repoDirectory url
@@ -141,6 +147,7 @@ fhistory() { # Fuzzy match shell history search and evaluation
 }
 
 # Miscellaneous
+alias v.="nvim"
 alias c.="code ."
 alias c="clear"
 alias l="clear; ls"
