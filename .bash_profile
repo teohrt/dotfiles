@@ -158,7 +158,7 @@ alias path='echo -e ${PATH//:/\\n}'
 alias ip="ipconfig getifaddr en0"
 alias mac="networksetup -getmacaddress en0"
 alias m="make"
-alias big10="du -a -h ./ | sort -h -r | head -n 10"
+alias big10="du -a -h ./ | sort -h -r | head -n 10" # show 10 largest files/dirs in current directory
 
 wifipwd () { # Retrieve wifi password - fuzzy match SSIDs if none is provided
     local network
