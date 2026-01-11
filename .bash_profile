@@ -57,51 +57,6 @@ ns () { # select and run a package.json script THROUGH NPM with fuzzy matching
     fi
 }
 
-# Preferred options
-alias mv="mv -v"
-alias rm="rm -i -v"
-alias cp="cp -v"
-alias ls="ls -Aplhtr"
-alias grep="grep --ignore-case --color --line-number"
-alias mkdir="mkdir -pv "
-
-# Navigation
-alias x="exit"
-alias o="open ."
-alias ..="cd ..; clear; ls"
-alias ...="cd ../..; clear; ls"
-alias ~="cd ~; clear; ls"
-alias Downloads="cd ~/Downloads; clear; ls"
-alias Documents="cd ~/Documents; clear; ls"
-alias Dev="cd ~/Dev; clear; ls"
-
-fd() { # Fuzzy match directory navigation
-  local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m)
-  cd "$dir"
-}
-
-fhistory() { # Fuzzy match shell history search and evaluation
-  local cmd
-  cmd=$(history | cut -c 8- | fzf)
-  echo "$cmd"
-  eval "$cmd"
-}
-
-# Miscellaneous
-alias v.="nvim"
-alias c.="code ."
-alias c="clear"
-alias l="clear; ls"
-alias ninja="chmod 700 "
-alias sneak="chmod 600 "
-alias epg="printenv | grep "
-alias path='echo -e ${PATH//:/\\n}'
-alias ip="ipconfig getifaddr en0"
-alias mac="networksetup -getmacaddress en0"
-alias m="make"
-alias big10="du -a -h ./ | sort -h -r | head -n 10" # show 10 largest files/dirs in current directory
-
 wifipwd () { # Retrieve wifi password - fuzzy match SSIDs if none is provided
     local network
     network=$1
