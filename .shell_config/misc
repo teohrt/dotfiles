@@ -5,6 +5,10 @@ export PS1='\[\]🪂 \[\e[2m\]\t\[\e[22m\] \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
+# Meta
+alias ebash="code ~/.bash_profile"
+alias rbash="source ~/.bash_profile"
+
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'
 
