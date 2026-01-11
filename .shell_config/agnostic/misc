@@ -1,6 +1,4 @@
 # Shell Personality
-# source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
-source /usr/share/git/completion/git-prompt.sh
 export PS1='\[\]🪂 \[\e[2m\]\t\[\e[22m\] \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
@@ -19,22 +17,8 @@ alias ninja="chmod 700 "
 alias sneak="chmod 600 "
 alias epg="printenv | grep "
 alias path='echo -e ${PATH//:/\\n}'
-alias ip="ipconfig getifaddr en0"
-alias mac="networksetup -getmacaddress en0"
 alias m="make"
 alias big10="du -a -h ./ | sort -h -r | head -n 10" # show 10 largest files/dirs in current directory
-
-wifipwd () { # Retrieve wifi password - fuzzy match SSIDs if none is provided
-    local network
-    network=$1
-    if [ "$network" = "" ] ; then
-      network=$(networksetup -listpreferredwirelessnetworks en0 | awk '{$1=$1};1' | fzf)
-    fi
-    if [ "$network" != "" ] ; then # network could still be empty if fzf was exited
-      echo Network: $network
-      security find-generic-password -ga "$network" | grep "password:"
-    fi
-}
 
 fkill () { # Fuzzy matching process murder
   local process pid
