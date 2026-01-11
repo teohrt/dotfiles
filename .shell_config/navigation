@@ -1,12 +1,9 @@
-# Preferred options
 alias mv="mv -v"
 alias rm="rm -i -v"
 alias cp="cp -v"
 alias ls="ls -Aplhtr"
 alias grep="grep --ignore-case --color --line-number"
 alias mkdir="mkdir -pv "
-
-# Navigation
 alias x="exit"
 alias o="open ."
 alias ..="cd ..; clear; ls"
@@ -28,17 +25,3 @@ fhistory() { # Fuzzy match shell history search and evaluation
   echo "$cmd"
   eval "$cmd"
 }
-
-# Miscellaneous
-alias v.="nvim"
-alias c.="code ."
-alias c="clear"
-alias l="clear; ls"
-alias ninja="chmod 700 "
-alias sneak="chmod 600 "
-alias epg="printenv | grep "
-alias path='echo -e ${PATH//:/\\n}'
-alias ip="ipconfig getifaddr en0"
-alias mac="networksetup -getmacaddress en0"
-alias m="make"
-alias big10="du -a -h ./ | sort -h -r | head -n 10" # show 10 largest files/dirs in current directory
