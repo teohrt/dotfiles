@@ -1,1 +1,3 @@
 source /usr/share/git/completion/git-prompt.sh
+
+alias open="xdg-open"

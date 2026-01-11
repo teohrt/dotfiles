@@ -9,8 +9,8 @@ case "$(uname -s)" in
     *)       OS="unknown" ;;
 esac
 
-# Load agnostic configs, then OS-specific
-for dir in "${CONFIG_DIR}/agnostic" "${CONFIG_DIR}/${OS}"; do
+# Load OS-specific then agnostic configs 
+for dir in "${CONFIG_DIR}/${OS}" "${CONFIG_DIR}/agnostic"; do
     [ -d "$dir" ] && for f in "$dir"/*; do
         [ -f "$f" ] && source "$f"
     done
