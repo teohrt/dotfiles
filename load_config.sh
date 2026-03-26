@@ -1,6 +1,6 @@
 #!/bin/bash
 
-CONFIG_DIR="${HOME}/dotfiles/.shell_config"
+CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.shell_config"
 
 # Detect OS
 case "$(uname -s)" in
