@@ -5,25 +5,23 @@ Welcome to my humble abode.
 
 ## Setup
 
-1. Clone this repository to your home directory:
+1. Clone this repository anywhere:
    ```bash
-   git clone <repo-url> ~/dotfiles
+   git clone <repo-url> ~/Dev/other/dotfiles
+   cd ~/Dev/other/dotfiles
    ```
 
-2. Set up your `.bashrc` to use the dotfiles:
+2. Stow the dotfiles into your home directory:
    ```bash
-   cp ~/dotfiles/.bashrc_template ~/.bashrc
+   make stow
    ```
 
-   Or manually add this line to your existing `~/.bashrc`:
-   ```bash
-   source ~/dotfiles/load_config.sh
-   ```
-
-3. Reload your shell configuration:
+3. Reload your shell:
    ```bash
    source ~/.bashrc
    ```
+
+To remove symlinks: `make unstow`
 
 ## How It Works
 
@@ -54,6 +52,7 @@ dotfiles/
 │   └── mac/               # macOS-specific configs
 │       └── misc
 ├── load_config.sh         # Main script that loads configs based on OS
-├── .bashrc_template       # Template for ~/.bashrc
+├── .bashrc                # Sourced by shell, sources load_config.sh
+├── .bash_profile          # Sources .bashrc
 └── README.md
 ```
