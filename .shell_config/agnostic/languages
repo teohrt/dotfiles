@@ -2,10 +2,6 @@
 export GOPATH=$HOME/go
 export PATH=$PATH:$GOPATH/bin
 
-# Python
-eval "$(pyenv init --path)"
-alias activate="source .venv/bin/activate"
-
 # JavaScript
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
