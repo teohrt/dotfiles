@@ -1,4 +1,17 @@
-source /usr/share/git/completion/git-prompt.sh
+# Source git-prompt.sh for __git_ps1 used in PS1
+# Paths: Arch (/usr/share/git), NixOS (/run/current-system/sw/share/bash-completion)
+_git_prompt_found=0
+for _git_prompt in \
+    /usr/share/git/completion/git-prompt.sh \
+    /run/current-system/sw/share/bash-completion/completions/git-prompt.sh; do
+    if [ -f "$_git_prompt" ]; then
+        source "$_git_prompt"
+        _git_prompt_found=1
+        break
+    fi
+done
+[ "$_git_prompt_found" -eq 0 ] && echo "Warning: git-prompt.sh not found, __git_ps1 unavailable" >&2
+unset _git_prompt _git_prompt_found
 
 alias open="xdg-open"
 
