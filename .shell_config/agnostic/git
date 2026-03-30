@@ -8,6 +8,7 @@ alias gl="git log"
 alias ga="git add . ; git status"
 alias gc="git commit -m "
 alias gchB="git checkout -B"
+alias unstage="git restore --staged ."
 
 export GPG_TTY=$(tty) # facilitate gpg signing for git commits
 
