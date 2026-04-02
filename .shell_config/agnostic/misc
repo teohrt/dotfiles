@@ -10,7 +10,7 @@ alias rbash="source ~/.bash_profile"
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'
 
-alias c.="cursor ."
+alias c.="code ."
 alias c="clear"
 alias l="clear; ls"
 alias ninja="chmod 700 "
