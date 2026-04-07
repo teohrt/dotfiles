@@ -1,5 +1,7 @@
 DOTFILES := $(shell pwd)
 
+.PHONY: stow unstow git-profiles git-profiles-unlink all
+
 stow:
 	stow --target=$(HOME) .
 
