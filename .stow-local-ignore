@@ -3,3 +3,5 @@ README.md
 .git*
 Makefile
 .gitignore
+git-profiles
+load_config.sh
