@@ -1,3 +1,5 @@
+eval "$(direnv hook bash)"
+
 # Source git-prompt.sh for __git_ps1 used in PS1
 # Paths: Arch (/usr/share/git), NixOS (/run/current-system/sw/share/bash-completion)
 _git_prompt_found=0
