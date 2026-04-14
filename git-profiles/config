@@ -30,7 +30,6 @@
 	name = Trace Ohrt
 	email = teohrt18@gmail.com
 
-
 [includeIf "gitdir:~/Dev/work/"]
     path = ~/Dev/work/.gitconfig-work
 
