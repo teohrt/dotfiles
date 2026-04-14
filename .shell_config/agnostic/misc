@@ -1,11 +1,16 @@
 # Shell Personality
-export PS1='\[\]🪂 \[\e[2m\]\t\[\e[22m\] \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
+if [ -n "$ZSH_VERSION" ]; then
+    setopt PROMPT_SUBST
+    export PS1=$'🪂 %{\e[2m%}%T%{\e[22m%} %n(%F{cyan}%1~%f)%F{green}%B$(__git_ps1 " (%s)")%b%f→ '
+else
+    export PS1='\[\]🪂 \[\e[2m\]\t\[\e[22m\] \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
+fi
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 
 # Meta
-alias ebash="code ~/.bash_profile"
-alias rbash="source ~/.bash_profile"
+alias ezsh="code ~/.zshrc"
+alias rzsh="source ~/.zshrc"
 
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'

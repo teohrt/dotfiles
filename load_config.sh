@@ -1,6 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 
-CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.shell_config"
+# Works in both bash and zsh
+if [ -n "$ZSH_VERSION" ]; then
+    CONFIG_DIR="$(dirname "$(realpath "${(%):-%x}")")/.shell_config"
+else
+    CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.shell_config"
+fi
 
 # Detect OS
 case "$(uname -s)" in
@@ -9,9 +14,16 @@ case "$(uname -s)" in
     *)       OS="unknown" ;;
 esac
 
-# Load OS-specific then agnostic configs 
+# Load OS-specific then agnostic configs
 for dir in "${CONFIG_DIR}/${OS}" "${CONFIG_DIR}/agnostic"; do
     [ -d "$dir" ] && for f in "$dir"/*; do
         [ -f "$f" ] && source "$f"
     done
 done
+
+# Zsh completions setup
+if [ -n "$ZSH_VERSION" ]; then
+    autoload -Uz compinit && compinit
+    zstyle ':completion:*' menu select
+    zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}'  # case-insensitive
+fi

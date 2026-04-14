@@ -1,4 +1,4 @@
 [user]
-    email = email@email.com
+  email = trace.ohrt@hudsonts.com
 [core]
   sshCommand = "ssh -i ~/.ssh/work"

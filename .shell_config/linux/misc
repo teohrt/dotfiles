@@ -1,4 +1,9 @@
-eval "$(direnv hook bash)"
+# Direnv hook - shell-aware
+if [ -n "$ZSH_VERSION" ]; then
+    eval "$(direnv hook zsh)"
+else
+    eval "$(direnv hook bash)"
+fi
 
 # Source git-prompt.sh for __git_ps1 used in PS1
 # Paths: Arch (/usr/share/git), NixOS (/run/current-system/sw/share/bash-completion)
