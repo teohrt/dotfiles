@@ -11,3 +11,5 @@ setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicates first when trimming
 setopt HIST_IGNORE_ALL_DUPS   # Remove older duplicates when new one added
 setopt SHARE_HISTORY          # Share history between sessions
 setopt HIST_VERIFY            # Show command before executing from history
+
+unsetopt PROMPT_SP            # Disable partial line indicator (%)
