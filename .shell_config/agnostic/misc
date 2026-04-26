@@ -1,7 +1,7 @@
 # Shell Personality
 if [ -n "$ZSH_VERSION" ]; then
     setopt PROMPT_SUBST
-    export PS1=$'🪂 %{\e[2m%}%T%{\e[22m%} %n(%F{cyan}%1~%f)%F{green}%B$(__git_ps1 " (%s)")%b%f→ '
+    export PS1=$'🪂 %n(%F{cyan}%1~%f)%F{green}%B$(__git_ps1 " (%s)")%b%f→ '
 else
     export PS1='\[\]🪂 \[\e[2m\]\t\[\e[22m\] \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
 fi

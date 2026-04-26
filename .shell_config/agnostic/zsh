@@ -11,3 +11,37 @@ setopt HIST_EXPIRE_DUPS_FIRST # Expire duplicates first when trimming
 setopt HIST_IGNORE_ALL_DUPS   # Remove older duplicates when new one added
 setopt SHARE_HISTORY          # Share history between sessions
 setopt HIST_VERIFY            # Show command before executing from history
+
+unsetopt PROMPT_SP            # Disable partial line indicator (%)
+
+# Command duration tracking for RPROMPT
+zmodload zsh/datetime
+
+_cmd_start_time=
+_cmd_duration=""
+
+preexec() {
+    _cmd_start_time=$EPOCHREALTIME
+}
+
+precmd() {
+    if [[ -n $_cmd_start_time ]]; then
+        local elapsed=$(( EPOCHREALTIME - _cmd_start_time ))
+        if (( elapsed >= 3600 )); then
+            _cmd_duration="$(( elapsed / 3600 | 0 ))h $(( (elapsed % 3600) / 60 | 0 ))m"
+        elif (( elapsed >= 60 )); then
+            _cmd_duration="$(( elapsed / 60 | 0 ))m $(( elapsed % 60 | 0 ))s"
+        elif (( elapsed >= 1 )); then
+            _cmd_duration=$(printf "%.2fs" $elapsed)
+        else
+            _cmd_duration=""
+        fi
+        _cmd_start_time=
+    fi
+
+    if [[ -n $_cmd_duration ]]; then
+        RPROMPT="%F{blue}${_cmd_duration}%f %F{8}│%f %F{white}%D{%I:%M %p}%f"
+    else
+        RPROMPT="%F{white}%D{%I:%M %p}%f"
+    fi
+}
