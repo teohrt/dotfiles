@@ -18,7 +18,7 @@ Welcome to my humble abode.
 
 3. Reload your shell:
    ```bash
-   source ~/.bashrc
+   source ~/.zshrc   # or: rzsh
    ```
 
 To remove symlinks: `make unstow`
@@ -42,17 +42,27 @@ All files in these directories will be automatically sourced when your shell sta
 ```
 dotfiles/
 ├── .shell_config/
-│   ├── agnostic/          # Configs that work on all OSes
-│   │   ├── git
-│   │   ├── languages
-│   │   ├── misc
-│   │   └── navigation
-│   ├── linux/             # Linux-specific configs
-│   │   └── misc
-│   └── mac/               # macOS-specific configs
+│   ├── agnostic/
+│   │   ├── git            # Git aliases
+│   │   ├── languages      # Language-specific setup (nvm, cargo, etc.)
+│   │   ├── misc           # PS1 prompt, general aliases, fzf config
+│   │   ├── navigation     # Directory navigation aliases
+│   │   └── zsh            # History, RPROMPT, command duration tracking
+│   ├── linux/
+│   │   └── misc           # direnv, git-prompt.sh, Linux aliases
+│   └── mac/
 │       └── misc
-├── load_config.sh         # Main script that loads configs based on OS
-├── .bashrc                # Sourced by shell, sources load_config.sh
-├── .bash_profile          # Sources .bashrc
+├── load_config.sh         # Main loader script (detects OS and shell)
+├── .zshrc                 # Entry point, sources load_config.sh
 └── README.md
 ```
+
+## NixOS Integration
+
+Zsh plugins (autosuggestions, syntax-highlighting) are configured in the NixOS config, not here. See `programs.zsh` in your NixOS configuration.
+
+This repo only manages shell config files via stow; plugin installation is handled by NixOS.
+
+## Legacy Bash Support
+
+Bash configs (`.bashrc`, `.bash_profile`) exist but are unmaintained. The core `load_config.sh` script works with both shells, so basic functionality remains intact.
