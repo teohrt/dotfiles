@@ -27,10 +27,11 @@ preexec() {
 precmd() {
     if [[ -n $_cmd_start_time ]]; then
         local elapsed=$(( EPOCHREALTIME - _cmd_start_time ))
-        if (( elapsed >= 3600 )); then
-            _cmd_duration="$(( int(elapsed / 3600) ))h $(( int((elapsed % 3600) / 60) ))m"
-        elif (( elapsed >= 60 )); then
-            _cmd_duration="$(( int(elapsed / 60) ))m $(( int(elapsed % 60) ))s"
+        local -i secs=${elapsed%.*}
+        if (( secs >= 3600 )); then
+            _cmd_duration="$(( secs / 3600 ))h $(( (secs % 3600) / 60 ))m"
+        elif (( secs >= 60 )); then
+            _cmd_duration="$(( secs / 60 ))m $(( secs % 60 ))s"
         else
             _cmd_duration=$(printf "%.3fs" $elapsed)
         fi
