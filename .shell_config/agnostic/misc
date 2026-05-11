@@ -1,9 +1,36 @@
 # Shell Personality
+__build_ps1() {
+    local git="$(__git_ps1 " (%s)")"
+    local time_str="$(date +'%I:%M %p')"
+
+    # Build right-side content for top line
+    local right_plain="$time_str"
+    if [ -n "$_cmd_duration" ]; then
+        right_plain="${_cmd_duration} │ ${time_str}"
+    fi
+
+    # Right-align time info on top line
+    local left_text="╭─ $PWD"
+    local left_len=${#left_text}
+    local spaces=$(( COLUMNS - left_len - ${#right_plain} ))
+    [ "$spaces" -lt 2 ] && spaces=2
+    local gap=$(printf '%*s' "$spaces" '')
+
+    if [ -n "$ZSH_VERSION" ]; then
+        local right_colored="%F{white}${time_str}%f"
+        if [ -n "$_cmd_duration" ]; then
+            right_colored="%F{blue}${_cmd_duration}%f %F{245}│%f %F{white}${time_str}%f"
+        fi
+        PS1="╭─ %F{blue}$PWD%f${gap}${right_colored}"$'\n'"╰─ 🪂%F{green}%B${git}%b%f → "
+    else
+        PS1="╭─ \[\e[0;34m\]$PWD\[\e[m\]${gap}\[\e[0;37m\]${time_str}\[\e[m\]\n╰─ 🪂\[\e[1;32m\]${git}\[\e[m\] → "
+    fi
+}
 if [ -n "$ZSH_VERSION" ]; then
     setopt PROMPT_SUBST
-    export PS1=$'🪂 %n(%F{cyan}%1~%f)%F{green}%B$(__git_ps1 " (%s)")%b%f→ '
+    precmd_functions+=(__build_ps1)
 else
-    export PS1='\[\]🪂 \[\e[2m\]\t\[\e[22m\] \u(\[\e[0;36m\]\W\[\e[m\])\[\e[1;32m\]$(__git_ps1 " (%s)")\[\e[m\]→ '
+    PROMPT_COMMAND="__build_ps1${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 fi
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
