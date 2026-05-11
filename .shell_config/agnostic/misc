@@ -9,21 +9,18 @@ __build_ps1() {
         right_plain="${_cmd_duration} │ ${time_str}"
     fi
 
-    # Right-align time info on top line
-    local left_text="╭─ $PWD"
-    local left_len=${#left_text}
-    local spaces=$(( COLUMNS - left_len - ${#right_plain} ))
-    [ "$spaces" -lt 2 ] && spaces=2
-    local gap=$(printf '%*s' "$spaces" '')
-
+    # Print top line with right-aligned time info
+    local right_col=$(( COLUMNS - ${#right_plain} - 1 ))
     if [ -n "$ZSH_VERSION" ]; then
         local right_colored="%F{white}${time_str}%f"
         if [ -n "$_cmd_duration" ]; then
             right_colored="%F{blue}${_cmd_duration}%f %F{245}│%f %F{white}${time_str}%f"
         fi
-        PS1="╭─ %F{blue}$PWD%f${gap}${right_colored}"$'\n'"╰─ 🪂%F{green}%B${git}%b%f → "
+        print -P "╭─ %F{blue}$PWD%f\e[${right_col}G${right_colored}"
+        PS1="╰─ 🪂%F{green}%B${git}%b%f → "
     else
-        PS1="╭─ \[\e[0;34m\]$PWD\[\e[m\]${gap}\[\e[0;37m\]${time_str}\[\e[m\]\n╰─ 🪂\[\e[1;32m\]${git}\[\e[m\] → "
+        printf "╭─ \e[0;34m%s\e[m\e[%dG\e[0;37m%s\e[m\n" "$PWD" "$right_col" "$time_str"
+        PS1="╰─ 🪂\[\e[1;32m\]${git}\[\e[m\] → "
     fi
 }
 if [ -n "$ZSH_VERSION" ]; then
