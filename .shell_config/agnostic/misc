@@ -12,11 +12,11 @@ __build_ps1() {
     # Top two lines printed directly (not in PS1) so zsh's line editor only
     # tracks the input line, avoiding cursor-position mismatches.
     if [ -n "$ZSH_VERSION" ]; then
-        local mid_colored="%F{blue}${time_str}%f"
+        local mid_colored="${time_str}"
         if [ -n "$_cmd_duration" ]; then
-            mid_colored="%F{blue}${time_str}%f  %F{green}${_cmd_duration}%f"
+            mid_colored="${time_str} %F{green}${_cmd_duration}%f"
         fi
-        print -P "╭─ %F{cyan}${PWD}%f"
+        print -P "╭─%F{cyan}${PWD}%f"
         print -P "│ 🪂 ${mid_colored}"
         if [ -n "$git" ]; then
             PS1="╰─%F{green}%B${git}%b%f─⟫ "
@@ -24,11 +24,11 @@ __build_ps1() {
             PS1="╰─⟫ "
         fi
     else
-        printf "╭─ \e[0;36m%s\e[m\n" "$PWD"
+        printf "╭─\e[0;36m%s\e[m\n" "$PWD"
         if [ -n "$_cmd_duration" ]; then
-            printf "│ 🪂 \e[0;34m%s\e[m  \e[0;32m%s\e[m\n" "$time_str" "$_cmd_duration"
+            printf "│ 🪂 %s \e[0;32m%s\e[m\n" "$time_str" "$_cmd_duration"
         else
-            printf "│ 🪂 \e[0;34m%s\e[m\n" "$time_str"
+            printf "│ 🪂 %s\n" "$time_str"
         fi
         if [ -n "$git" ]; then
             PS1="╰─\[\e[1;32m\]${git}\[\e[m\]─⟫ "
