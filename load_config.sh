@@ -1,5 +1,9 @@
 #!/bin/sh
 
+# Prevent double-sourcing (macOS opens login shells, running both .zprofile and .zshrc)
+[ -n "$_SHELL_CONFIG_LOADED" ] && return
+_SHELL_CONFIG_LOADED=1
+
 # Works in both bash and zsh
 if [ -n "$ZSH_VERSION" ]; then
     CONFIG_DIR="$(dirname "$(realpath "${(%):-%x}")")/.shell_config"
