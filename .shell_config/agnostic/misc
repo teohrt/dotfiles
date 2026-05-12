@@ -52,6 +52,7 @@ alias rzsh="source ~/.zshrc"
 
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'
+export FZF_DEFAULT_OPTS='--wrap'
 
 alias c.="code ."
 alias c="clear"
