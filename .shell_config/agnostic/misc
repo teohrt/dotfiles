@@ -1,3 +1,10 @@
+# Direnv hook - shell-aware
+if [ -n "$ZSH_VERSION" ]; then
+    eval "$(direnv hook zsh)"
+else
+    eval "$(direnv hook bash)"
+fi
+
 # Shell Personality
 __build_ps1() {
     local git="$(__git_ps1 "(%s)")"
