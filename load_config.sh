@@ -11,6 +11,13 @@ else
     CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.shell_config"
 fi
 
+# Source Nix profile if present (must happen early so Nix-installed tools are on PATH)
+if [ -e "$HOME/.nix-profile/etc/profile.d/nix.sh" ]; then
+    . "$HOME/.nix-profile/etc/profile.d/nix.sh"
+elif [ -e "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh" ]; then
+    . "/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh"
+fi
+
 # Detect OS
 case "$(uname -s)" in
     Linux*)  OS="linux" ;;

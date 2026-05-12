@@ -1,8 +1,12 @@
 # Direnv hook - shell-aware
-if [ -n "$ZSH_VERSION" ]; then
-    eval "$(direnv hook zsh)"
+if command -v direnv &>/dev/null; then
+    if [ -n "$ZSH_VERSION" ]; then
+        eval "$(direnv hook zsh)"
+    else
+        eval "$(direnv hook bash)"
+    fi
 else
-    eval "$(direnv hook bash)"
+    echo "Warning: direnv not found on PATH" >&2
 fi
 
 # Shell Personality
