@@ -14,40 +14,8 @@ setopt HIST_VERIFY            # Show command before executing from history
 
 unsetopt PROMPT_SP            # Disable partial line indicator (%)
 
-# Command duration tracking
-zmodload zsh/datetime
-
-_cmd_start_time=
-_cmd_duration=""
-
-preexec() {
-    _cmd_start_time=$EPOCHREALTIME
-}
-
-precmd() {
-    # Buffer all output until zle-line-init so prompt renders in one frame,
-    # preventing the cursor trail from animating through each prompt character.
-    printf '\e[?2026h'
-
-    if [[ -n $_cmd_start_time ]]; then
-        local elapsed=$(( EPOCHREALTIME - _cmd_start_time ))
-        local -i secs=${elapsed%.*}
-        if (( secs >= 3600 )); then
-            _cmd_duration="$(( secs / 3600 ))h $(( (secs % 3600) / 60 ))m"
-        elif (( secs >= 60 )); then
-            _cmd_duration="$(( secs / 60 ))m $(( secs % 60 ))s"
-        else
-            _cmd_duration=$(printf "%.3fs" $elapsed)
-        fi
-        _cmd_start_time=
-    else
-        _cmd_duration=""
-    fi
-
-}
-
-# End synchronized output once prompt is rendered and line editor is ready.
-# This flushes the buffered prompt in a single frame, preventing the cursor
-# trail from animating character-by-character across the prompt.
+# Synchronized output: buffer prompt rendering until the line editor is ready,
+# then flush in one frame to prevent the cursor trail animation.
+precmd() { printf '\e[?2026h'; }
 zle-line-init() { printf '\e[?2026l'; }
 zle -N zle-line-init

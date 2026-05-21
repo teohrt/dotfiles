@@ -12,39 +12,19 @@ fi
 # Shell Personality
 __build_ps1() {
     local git="$(__git_ps1 "(%s)")"
-    local time_str="$(date +'%I:%M %p')"
 
-    # Build middle line: time and optional duration, left-aligned
-    local mid_line="$time_str"
-    if [ -n "$_cmd_duration" ]; then
-        mid_line="${time_str} │ ${_cmd_duration}"
-    fi
-
-    # Top two lines printed directly (not in PS1) so zsh's line editor only
-    # tracks the input line, avoiding cursor-position mismatches.
     if [ -n "$ZSH_VERSION" ]; then
-        local mid_colored="${time_str}"
-        if [ -n "$_cmd_duration" ]; then
-            mid_colored="${time_str} %F{green}${_cmd_duration}%f"
-        fi
-        print -P "╭─%F{cyan}${PWD}%f"
-        print -P "│ 🪂 ${mid_colored}"
         if [ -n "$git" ]; then
-            PS1="╰─%F{green}%B${git}%b%f─⟫ "
+            PS1="🪂 %F{cyan}%~%f %F{green}%B${git}%b%f ⟫ "
         else
-            PS1="╰─⟫ "
+            PS1="🪂 %F{cyan}%~%f ⟫ "
         fi
     else
-        printf "╭─\e[0;36m%s\e[m\n" "$PWD"
-        if [ -n "$_cmd_duration" ]; then
-            printf "│ 🪂 %s \e[0;32m%s\e[m\n" "$time_str" "$_cmd_duration"
-        else
-            printf "│ 🪂 %s\n" "$time_str"
-        fi
+        local rel_path="${PWD/#$HOME/~}"
         if [ -n "$git" ]; then
-            PS1="╰─\[\e[1;32m\]${git}\[\e[m\]─⟫ "
+            PS1="🪂 \[\e[0;36m\]${rel_path}\[\e[m\] \[\e[1;32m\]${git}\[\e[m\] ⟫ "
         else
-            PS1="╰─⟫ "
+            PS1="🪂 \[\e[0;36m\]${rel_path}\[\e[m\] ⟫ "
         fi
     fi
 }
