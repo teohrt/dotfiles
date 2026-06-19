@@ -11,7 +11,7 @@ fi
 
 # Shell Personality
 __build_ps1() {
-    local git="$(__git_ps1 "(%s)")"
+    local git="$(__git_ps1 " %s")"
 
     # Detect active dev environment
     local env_name=""
@@ -23,25 +23,25 @@ __build_ps1() {
 
     if [ -n "$ZSH_VERSION" ]; then
         local env_section=""
-        [ -n "$env_name" ] && env_section="%F{222}(${env_name})%f "
+        [ -n "$env_name" ] && env_section=" %F{222} ${env_name}%f"
 
         if [ -n "$git" ]; then
-            PS1="╭─ ${env_section}%F{cyan}%~%f %F{green}%B${git}%b%f
+            PS1="╭─ %F{cyan} %1/%f${env_section} %F{green}%B${git}%b%f
 ╰─⟫ "
         else
-            PS1="╭─ ${env_section}%F{cyan}%~%f
+            PS1="╭─ %F{cyan} %1/%f${env_section}
 ╰─⟫ "
         fi
     else
-        local rel_path="${PWD/#$HOME/~}"
+        local rel_path="${PWD##*/}"
         local env_section=""
-        [ -n "$env_name" ] && env_section="\[\e[38;5;222m\](${env_name})\[\e[m\] "
+        [ -n "$env_name" ] && env_section=" \[\e[38;5;222m\] ${env_name}\[\e[m\]"
 
         if [ -n "$git" ]; then
-            PS1="╭─ ${env_section}\[\e[0;36m\]${rel_path}\[\e[m\] \[\e[1;32m\]${git}\[\e[m\]
+            PS1="╭─ \[\e[0;36m\] ${rel_path}\[\e[m\]${env_section} \[\e[1;32m\]${git}\[\e[m\]
 ╰─⟫ "
         else
-            PS1="╭─ ${env_section}\[\e[0;36m\]${rel_path}\[\e[m\]
+            PS1="╭─ \[\e[0;36m\] ${rel_path}\[\e[m\]${env_section}
 ╰─⟫ "
         fi
     fi
