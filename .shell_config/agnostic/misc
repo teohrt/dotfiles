@@ -11,40 +11,32 @@ fi
 
 # Shell Personality
 __build_ps1() {
-    local git="$(__git_ps1 " %s")"
+    local dir_section="" env_section="" git_section=""
 
     # Detect active dev environment
     local env_name=""
-    if [ -n "$IN_NIX_SHELL" ]; then
+    if [ -n "$IN_NIX_SHELL" ]; then # nix develop / nix-shell
         env_name="${name:-nix}"
-    elif [ -n "$DIRENV_DIR" ]; then
-        env_name="$(basename "${DIRENV_DIR#-}")"
+    elif [ -n "$DIRENV_DIR" ]; then # direnv activated
+        env_name="$(basename "${DIRENV_DIR#-}")" # strip leading "-" added by direnv
     fi
 
-    if [ -n "$ZSH_VERSION" ]; then
-        local env_section=""
+    local git="$(__git_ps1 " %s")"
+
+    # Zsh: %F{color}...%f for color, %B...%b for bold, %1/ for basename
+    # Bash: \[...\] wraps non-printing chars, \e[...m for color, ${PWD##*/} for basename
+    if [ -n "$ZSH_VERSION" ]; then # zsh
+        dir_section="%F{cyan} %1/%f"
         [ -n "$env_name" ] && env_section=" %F{222} ${env_name}%f"
-
-        if [ -n "$git" ]; then
-            PS1="╭─ %F{cyan} %1/%f${env_section} %F{green}%B${git}%b%f
-╰─⟫ "
-        else
-            PS1="╭─ %F{cyan} %1/%f${env_section}
-╰─⟫ "
-        fi
-    else
-        local rel_path="${PWD##*/}"
-        local env_section=""
+        [ -n "$git" ] && git_section=" %F{green}%B${git}%b%f"
+    else # bash
+        dir_section="\[\e[0;36m\] ${PWD##*/}\[\e[m\]"
         [ -n "$env_name" ] && env_section=" \[\e[38;5;222m\] ${env_name}\[\e[m\]"
-
-        if [ -n "$git" ]; then
-            PS1="╭─ \[\e[0;36m\] ${rel_path}\[\e[m\]${env_section} \[\e[1;32m\]${git}\[\e[m\]
-╰─⟫ "
-        else
-            PS1="╭─ \[\e[0;36m\] ${rel_path}\[\e[m\]${env_section}
-╰─⟫ "
-        fi
+        [ -n "$git" ] && git_section=" \[\e[1;32m\]${git}\[\e[m\]"
     fi
+
+    PS1="╭─ ${dir_section}${env_section}${git_section}
+╰─⟫ "
 }
 if [ -n "$ZSH_VERSION" ]; then
     setopt PROMPT_SUBST
