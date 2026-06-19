@@ -54,6 +54,7 @@ else
 fi
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
+export EZA_COLORS="xx=37" # white punctuation (symlink arrows, etc.)
 
 # Meta
 alias ezsh="code ~/.zshrc"
