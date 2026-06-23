@@ -76,6 +76,52 @@ fkill () { # Fuzzy matching process murder
   fi
 }
 
+killport () { # Kill process(es) on a given port
+  local signal=TERM
+  if [ "$1" = "-f" ]; then
+    signal=KILL
+    shift
+  fi
+
+  local port=$1
+  if [ -z "$port" ]; then
+    echo "Usage: killport [-f] <port>" >&2
+    return 1
+  fi
+  if ! [ "$port" -eq "$port" ] 2>/dev/null; then
+    echo "killport: '$port' is not a valid port number" >&2
+    return 1
+  fi
+
+  local pids
+  pids=$(lsof -i :"$port" -t 2>/dev/null | sort -u)
+  if [ -z "$pids" ]; then
+    echo "No process found on port $port."
+    return 0
+  fi
+
+  echo ""
+  printf "  %-8s %-16s %s\n" "PID" "COMMAND" "USER"
+  echo "$pids" | while read -r pid; do
+    printf "  %-8s %-16s %s\n" \
+      "$pid" \
+      "$(ps -p "$pid" -o comm= 2>/dev/null)" \
+      "$(ps -p "$pid" -o user= 2>/dev/null)"
+  done
+  echo ""
+
+  local count
+  count=$(echo "$pids" | wc -l | tr -d ' ')
+  printf "Kill %s process(es) on port %s? [y/N] " "$count" "$port"
+  read -r reply
+  if [ "$reply" = "y" ] || [ "$reply" = "Y" ]; then
+    echo "$pids" | xargs kill -"$signal" 2>/dev/null
+    echo "Killed $count process(es) on port $port."
+  else
+    echo "Aborted."
+  fi
+}
+
 emoji () { # Fuzzy match emoji printing
   local emojis selected_emoji
   emojis=$(curl -sSL 'https://git.io/JXXO7')
