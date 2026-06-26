@@ -48,6 +48,7 @@
             packages = with pkgs; [
               gnumake
               shellcheck
+              stow
             ];
           };
         }
