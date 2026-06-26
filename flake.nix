@@ -26,6 +26,11 @@
               files = "\\.sh$";
               excludes = [ "agnostic/zsh\\.sh$" ];
             };
+            checkmake = {
+              enable = true;
+              extraPackages = [ nixpkgs.legacyPackages.${system}.checkmake ];
+              args = [ "--config=.checkmake.ini" ];
+            };
             deadnix.enable = true;
             statix.enable = true;
           };

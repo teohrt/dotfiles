@@ -9,4 +9,5 @@ flake.lock
 .envrc
 .direnv
 .pre-commit-config.yaml
+.checkmake.ini
 result
