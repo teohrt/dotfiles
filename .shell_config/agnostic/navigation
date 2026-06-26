@@ -15,8 +15,8 @@ alias Dev="cd ~/Dev; clear; ls"
 
 fd() { # Fuzzy match directory navigation
   local dir
-  dir=$(find ${1:-.} -type d 2> /dev/null | fzf +m)
-  cd "$dir"
+  dir=$(find "${1:-.}" -type d 2> /dev/null | fzf +m)
+  cd "$dir" || return
 }
 
 fhistory() { # Fuzzy match shell history search and evaluation

@@ -4,7 +4,7 @@ source /Library/Developer/CommandLineTools/usr/share/git-core/git-prompt.sh
 eval "$(/opt/homebrew/bin/brew shellenv)"
 
 # M1 Mac docker
-DOCKER_DEFAULT_PLATFORM="linux/amd64"
+export DOCKER_DEFAULT_PLATFORM="linux/amd64"
 
 alias ip="ipconfig getifaddr en0"
 alias mac="networksetup -getmacaddress en0"
@@ -16,7 +16,7 @@ wifipwd () { # Retrieve wifi password - fuzzy match SSIDs if none is provided
       network=$(networksetup -listpreferredwirelessnetworks en0 | awk '{$1=$1};1' | fzf)
     fi
     if [ "$network" != "" ] ; then # network could still be empty if fzf was exited
-      echo Network: $network
+      echo "Network: $network"
       security find-generic-password -ga "$network" | grep "password:"
     fi
 }

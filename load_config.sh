@@ -6,6 +6,7 @@ _SHELL_CONFIG_LOADED=1
 
 # Works in both bash and zsh
 if [ -n "$ZSH_VERSION" ]; then
+    # shellcheck disable=SC2296 # zsh-only expansion
     CONFIG_DIR="$(dirname "$(realpath "${(%):-%x}")")/.shell_config"
 else
     CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.shell_config"

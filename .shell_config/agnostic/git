@@ -10,18 +10,19 @@ alias gc="git commit -m "
 alias gchB="git checkout -B"
 alias unstage="git restore --staged ."
 
-export GPG_TTY=$(tty) # facilitate gpg signing for git commits
+GPG_TTY=$(tty) # facilitate gpg signing for git commits
+export GPG_TTY
 
 gh () { # open github branch specfic directory in web browser
   local branch origin repoURL repoName repoDirectory url
   branch=$(git rev-parse --abbrev-ref HEAD)
   origin=$(git config --get remote.origin.url)
-  repoURL=$(echo $origin | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//')
+  repoURL=$(echo "$origin" | sed -e's/git@/http:\/\//' -e's/\.git$//' | sed -E 's/(\/\/[^:]*):/\1\//')
   repoURL+="/tree/$branch"
-  repoName=$(echo $origin | sed -e'0,/\//d' -e's/.*\///' -e's/\.git$//')
+  repoName=$(echo "$origin" | sed -e'0,/\//d' -e's/.*\///' -e's/\.git$//')
   repoDirectory=$(pwd | sed "s/.*$repoName//")
   url="$repoURL$repoDirectory"
-  open $url
+  open "$url"
 }
 
 gbD () { # git branch delete with fuzzy matching
@@ -31,9 +32,9 @@ gbD () { # git branch delete with fuzzy matching
   branchName=$(echo "$branchInfo" | awk '{print $1}' | sed "s/.* //")
 
   echo Type \'yes\' if you want to delete "$branchName"
-  read ans
+  read -r ans
   if [ "$ans" = 'yes' ] ; then
-    git branch -D $(echo "$branchName")
+    git branch -D "$branchName"
   else
       echo Aborting.
   fi
@@ -43,12 +44,12 @@ gch () { # checkout git branch with fuzzy matching
   local branches branch
   branches=$(git --no-pager branch -vv) &&
   branch=$(echo "$branches" | fzf +m) &&
-  git checkout $(echo "$branch" | awk '{print $1}' | sed "s/.* //")
+  git checkout "$(echo "$branch" | awk '{print $1}' | sed "s/.* //")"
 }
 
 greset1 () {
     echo Type \'yes\' if you want to reset your git history by one commit:
-    read ans
+    read -r ans
     if [ "$ans" = 'yes' ] ; then
         git reset HEAD~1
     else
