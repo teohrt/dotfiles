@@ -23,12 +23,8 @@
             shellcheck = {
               enable = true;
               args = [ "--shell=bash" "-e" "SC1090" "-e" "SC1091" ];
-              # Default type filter is "shell" which misses extensionless config
-              # files under .shell_config/. Override to "text" so the files regex
-              # alone controls what gets checked.
-              types = lib.mkForce [ "text" ];
-              files = "(\\.sh$|\\.config/my-shell/)";
-              excludes = [ "\\.config/my-shell/agnostic/zsh$" ];
+              files = "\\.sh$";
+              excludes = [ "agnostic/zsh\\.sh$" ];
             };
             deadnix.enable = true;
             statix.enable = true;
