@@ -50,7 +50,7 @@ greset1 () {
     echo Type \'yes\' if you want to reset your git history by one commit:
     read ans
     if [ "$ans" = 'yes' ] ; then
-        git log -2 | grep commit | tail -1 | awk '{print $NF}' | xargs git reset
+        git reset HEAD~1
     else
         echo Aborting.
     fi
