@@ -1,4 +1,3 @@
-#!/bin/zsh
 # Interactive shell config - sources load_config.sh
 
 if [ -f "${HOME}/load_config.sh" ]; then

@@ -1,4 +1,4 @@
-#!/bin/sh
+# Shell config loader - sourced by .zshrc and .zprofile (not executed directly)
 
 # Prevent double-sourcing (macOS opens login shells, running both .zprofile and .zshrc)
 [ -n "$_SHELL_CONFIG_LOADED" ] && return
@@ -29,7 +29,7 @@ esac
 # Load OS-specific then agnostic configs
 for dir in "${CONFIG_DIR}/${OS}" "${CONFIG_DIR}/agnostic"; do
     [ -d "$dir" ] && for f in "$dir"/*; do
-        [ -f "$f" ] && source "$f"
+        [ -f "$f" ] && . "$f"
     done
 done
 
