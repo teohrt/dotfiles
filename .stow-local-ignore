@@ -8,4 +8,5 @@ flake.nix
 flake.lock
 .envrc
 .direnv
+.pre-commit-config.yaml
 result

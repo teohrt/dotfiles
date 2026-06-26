@@ -27,8 +27,8 @@
               # files under .shell_config/. Override to "text" so the files regex
               # alone controls what gets checked.
               types = lib.mkForce [ "text" ];
-              files = "(\\.sh$|\\.shell_config/)";
-              excludes = [ "\\.shell_config/agnostic/zsh$" ];
+              files = "(\\.sh$|\\.config/my-shell/)";
+              excludes = [ "\\.config/my-shell/agnostic/zsh$" ];
             };
             deadnix.enable = true;
             statix.enable = true;
