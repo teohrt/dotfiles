@@ -31,7 +31,7 @@
 	email = teohrt18@gmail.com
 
 [includeIf "gitdir:~/Dev/work/"]
-    path = ~/Dev/work/.gitconfig-work
+    path = ~/.config/git/work
 
 [includeIf "gitdir:~/Dev/other/"]
-    path = ~/Dev/other/.gitconfig-personal
+    path = ~/.config/git/personal

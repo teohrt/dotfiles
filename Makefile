@@ -1,24 +1,23 @@
-DOTFILES := $(shell pwd)
+.PHONY: stow-shell unstow-shell stow-git unstow-git stow-direnv unstow-direnv stow-all unstow-all
 
-.PHONY: stow unstow git-profiles git-profiles-unlink all
+stow-shell:
+	stow --target=$(HOME) shell
 
-stow:
-	stow --target=$(HOME) .
+unstow-shell:
+	stow --target=$(HOME) --delete shell
 
-unstow:
-	stow --target=$(HOME) --delete .
+stow-git:
+	stow --target=$(HOME) git
 
-git-profiles:
-	mkdir -p $(HOME)/.config/git
-	mkdir -p $(HOME)/Dev/work
-	mkdir -p $(HOME)/Dev/other
-	ln -sf $(DOTFILES)/git-profiles/config $(HOME)/.config/git/config
-	ln -sf $(DOTFILES)/git-profiles/.gitconfig-work $(HOME)/Dev/work/.gitconfig-work
-	ln -sf $(DOTFILES)/git-profiles/.gitconfig-personal $(HOME)/Dev/other/.gitconfig-personal
+unstow-git:
+	stow --target=$(HOME) --delete git
 
-git-profiles-unlink:
-	rm -f $(HOME)/.config/git/config
-	rm -f $(HOME)/Dev/work/.gitconfig-work
-	rm -f $(HOME)/Dev/other/.gitconfig-personal
+stow-direnv:
+	stow --target=$(HOME) direnv
 
-all: stow git-profiles
+unstow-direnv:
+	stow --target=$(HOME) --delete direnv
+
+stow-all: stow-shell stow-git stow-direnv
+
+unstow-all: unstow-shell unstow-git unstow-direnv

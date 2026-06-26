@@ -13,7 +13,7 @@ ys () { # select and run a package.json script THROUGH YARN with fuzzy matching
       echo No package.json in this directory
     else
       script=$(jq '.scripts | keys[]' package.json | sed 's/"//g' | fzf)
-      yarn run $script
+      yarn run "$script"
     fi
 }
 
@@ -23,6 +23,6 @@ ns () { # select and run a package.json script THROUGH NPM with fuzzy matching
       echo No package.json in this directory
     else
       script=$(jq '.scripts | keys[]' package.json | sed 's/"//g' | fzf)
-      npm run $script
+      npm run "$script"
     fi
 }

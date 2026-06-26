@@ -21,7 +21,8 @@ __build_ps1() {
         env_name="$(basename "${DIRENV_DIR#-}")" # strip leading "-" added by direnv
     fi
 
-    local git="$(__git_ps1 " %s")"
+    local git
+    git="$(__git_ps1 " %s")"
 
     # Zsh: %F{color}...%f for color, %B...%b for bold, %1/ for basename
     # Bash: \[...\] wraps non-printing chars, \e[...m for color, ${PWD##*/} for basename
@@ -71,8 +72,8 @@ fkill () { # Fuzzy matching process murder
   process=$(ps -ef | sed 1d | fzf -m)
   if [ "$process" != "" ] ; then
     pid=$(echo "$process" | awk '{print $2}')
-    echo $pid | xargs kill -${1:-9}
-    echo $process
+    echo "$pid" | xargs kill -"${1:-9}"
+    echo "$process"
   fi
 }
 
@@ -126,5 +127,5 @@ emoji () { # Fuzzy match emoji printing
   local emojis selected_emoji
   emojis=$(curl -sSL 'https://git.io/JXXO7')
   selected_emoji=$(echo "$emojis" | fzf)
-  echo $selected_emoji
+  echo "$selected_emoji"
 }

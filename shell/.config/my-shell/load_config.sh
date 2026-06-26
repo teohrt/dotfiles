@@ -1,4 +1,4 @@
-#!/bin/sh
+# Shell config loader - sourced by .zshrc and .zprofile (not executed directly)
 
 # Prevent double-sourcing (macOS opens login shells, running both .zprofile and .zshrc)
 [ -n "$_SHELL_CONFIG_LOADED" ] && return
@@ -6,9 +6,10 @@ _SHELL_CONFIG_LOADED=1
 
 # Works in both bash and zsh
 if [ -n "$ZSH_VERSION" ]; then
-    CONFIG_DIR="$(dirname "$(realpath "${(%):-%x}")")/.shell_config"
+    # shellcheck disable=SC2296 # zsh-only expansion
+    CONFIG_DIR="$(dirname "$(realpath "${(%):-%x}")")"
 else
-    CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")/.shell_config"
+    CONFIG_DIR="$(dirname "$(realpath "${BASH_SOURCE[0]}")")"
 fi
 
 # Source Nix profile if present (must happen early so Nix-installed tools are on PATH)
@@ -28,7 +29,7 @@ esac
 # Load OS-specific then agnostic configs
 for dir in "${CONFIG_DIR}/${OS}" "${CONFIG_DIR}/agnostic"; do
     [ -d "$dir" ] && for f in "$dir"/*; do
-        [ -f "$f" ] && source "$f"
+        [ -f "$f" ] && . "$f"
     done
 done
 
