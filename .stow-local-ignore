@@ -4,3 +4,8 @@ README.md
 Makefile
 .gitignore
 git-profiles
+flake.nix
+flake.lock
+.envrc
+.direnv
+result
