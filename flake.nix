@@ -43,7 +43,6 @@
         in
         {
           default = pkgs.mkShell {
-            name = "my-dotfiles";
             inherit (self.checks.${system}.pre-commit-check) shellHook;
             packages = with pkgs; [
               gnumake
