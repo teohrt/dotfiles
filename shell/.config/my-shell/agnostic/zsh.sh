@@ -1,6 +1,8 @@
 # Zsh-specific configuration
 [ -z "$ZSH_VERSION" ] && return
 
+eval "$(zoxide init zsh)"
+
 # History
 HISTFILE="${HOME}/.zsh_history"
 HISTSIZE=50000
