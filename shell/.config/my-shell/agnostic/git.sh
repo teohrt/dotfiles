@@ -1,8 +1,24 @@
 alias push="git push"
 alias pushF="git push --force"
 alias pull="git pull"
-alias stash="git stash --include-untracked"
-alias pop="git stash pop"
+stash () {
+  local msg
+  echo -n "Stash name: "
+  read -r msg
+  git stash push --include-untracked -m "$msg"
+}
+pop () {
+  local stashes selection index
+  stashes=$(git stash list) || return
+  if [ -z "$stashes" ]; then
+    echo "No stashes found."
+    return 1
+  fi
+  # shellcheck disable=SC2016
+  selection=$(echo "$stashes" | fzf +m --preview 'git stash show -p $(echo {} | cut -d: -f1) | delta') || return
+  index=$(echo "$selection" | cut -d: -f1)
+  git stash pop "$index"
+}
 alias gs="clear; git status"
 alias gl="git log"
 alias ga="git add . ; git status"
