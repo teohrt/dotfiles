@@ -14,7 +14,8 @@ pop () {
     echo "No stashes found."
     return 1
   fi
-  selection=$(echo "$stashes" | fzf +m) || return
+  # shellcheck disable=SC2016
+  selection=$(echo "$stashes" | fzf +m --preview 'git stash show -p $(echo {} | cut -d: -f1) | delta') || return
   index=$(echo "$selection" | cut -d: -f1)
   git stash pop "$index"
 }
