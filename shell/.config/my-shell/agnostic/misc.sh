@@ -6,10 +6,10 @@ if command -v direnv &>/dev/null; then
         eval "$(direnv hook bash)"
     fi
 else
-    echo "Warning: direnv not found on PATH" >&2
+    gum log --level warn "direnv not found on PATH"
 fi
 
-# Shell Personality
+# Prompt
 __build_ps1() {
     local dir_section="" env_section="" git_section=""
 
@@ -45,6 +45,8 @@ if [ -n "$ZSH_VERSION" ]; then
 else
     PROMPT_COMMAND="__build_ps1${PROMPT_COMMAND:+;$PROMPT_COMMAND}"
 fi
+
+# Colors
 export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export EZA_COLORS="xx=37" # white punctuation (symlink arrows, etc.)
@@ -68,14 +70,16 @@ export GUM_WRITE_SHOW_HELP="false"
 export GUM_FILTER_SHOW_HELP="false"
 export GUM_CONFIRM_SHOW_HELP="false"
 
-# Meta
-alias ezsh="code ~/.zshrc"
-alias rzsh="source ~/.zshrc"
-
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'
 export FZF_DEFAULT_OPTS='--wrap'
 
+# Meta
+alias ezsh="code ~/.zshrc"
+alias rzsh="source ~/.zshrc"
+
+# Aliases
+alias gum="CLICOLOR_FORCE=1 gum"
 alias c.="code ."
 alias c="clear"
 alias l="clear; ls"
@@ -86,7 +90,9 @@ alias path='echo -e ${PATH//:/\\n}'
 alias m="make"
 alias big10="du -a -h ./ | sort -h -r | head -n 10" # show 10 largest files/dirs in current directory
 
-fkill () { # Fuzzy matching process murder
+# Functions
+fkill () {
+  # Fuzzy matching process murder
   local process pid
   process=$(ps -ef | sed 1d | gum filter --no-limit)
   if [ "$process" != "" ] ; then
@@ -96,7 +102,8 @@ fkill () { # Fuzzy matching process murder
   fi
 }
 
-killport () { # Kill process(es) on a given port
+killport () {
+  # Kill process(es) on a given port
   local signal=TERM
   if [ "$1" = "-f" ]; then
     signal=KILL
@@ -140,7 +147,8 @@ killport () { # Kill process(es) on a given port
   fi
 }
 
-emoji () { # Fuzzy match emoji printing
+emoji () {
+  # Fuzzy match emoji printing
   local emojis selected_emoji
   emojis=$(curl -sSL 'https://git.io/JXXO7')
   selected_emoji=$(echo "$emojis" | gum filter)
