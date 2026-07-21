@@ -1,17 +1,22 @@
 alias push="git push"
-alias pushF="git push --force"
+pushF () {
+  if gum confirm "Force push?"; then
+    git push --force
+  else
+    gum log --level warn "Aborting."
+  fi
+}
 alias pull="git pull"
 stash () {
   local msg
-  echo -n "Stash name: "
-  read -r msg
+  msg=$(gum input --placeholder "Stash name") || return
   git stash push --include-untracked -m "$msg"
 }
 pop () {
   local stashes selection index
   stashes=$(git stash list) || return
   if [ -z "$stashes" ]; then
-    echo "No stashes found."
+    gum log --level warn "No stashes found."
     return 1
   fi
   # shellcheck disable=SC2016
@@ -22,8 +27,16 @@ pop () {
 alias gs="clear; git status"
 alias gl="git log"
 alias ga="git add . ; git status"
-alias gc="git commit -m "
-alias gchB="git checkout -B"
+gc () {
+  local msg
+  msg=$(gum input --header "Commit message" --placeholder "...") || return
+  git commit -m "$msg"
+}
+gchB () {
+  local branch
+  branch=$(gum input --header "New branch name" --placeholder "...") || return
+  git checkout -B "$branch"
+}
 alias unstage="git restore --staged ."
 
 GPG_TTY=$(tty) # facilitate gpg signing for git commits
@@ -44,31 +57,27 @@ gh () { # open github branch specfic directory in web browser
 gbD () { # git branch delete with fuzzy matching
   local branches branchInfo branchName
   branches=$(git --no-pager branch -vv) &&
-  branchInfo=$(echo "$branches" | fzf +m) && 
+  branchInfo=$(echo "$branches" | gum filter) &&
   branchName=$(echo "$branchInfo" | awk '{print $1}' | sed "s/.* //")
 
-  echo Type \'yes\' if you want to delete "$branchName"
-  read -r ans
-  if [ "$ans" = 'yes' ] ; then
+  if gum confirm "Delete branch '$branchName'?"; then
     git branch -D "$branchName"
   else
-      echo Aborting.
+    gum log --level warn "Aborting."
   fi
 }
 
 gch () { # checkout git branch with fuzzy matching
   local branches branch
   branches=$(git --no-pager branch -vv) &&
-  branch=$(echo "$branches" | fzf +m) &&
+  branch=$(echo "$branches" | gum filter) || return
   git checkout "$(echo "$branch" | awk '{print $1}' | sed "s/.* //")"
 }
 
 greset1 () {
-    echo Type \'yes\' if you want to reset your git history by one commit:
-    read -r ans
-    if [ "$ans" = 'yes' ] ; then
+    if gum confirm "Reset git history by one commit?"; then
         git reset HEAD~1
     else
-        echo Aborting.
+        gum log --level warn "Aborting."
     fi
 }

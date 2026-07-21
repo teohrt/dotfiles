@@ -49,6 +49,25 @@ export CLICOLOR=1
 export LSCOLORS=GxFxCxDxBxegedabagaced
 export EZA_COLORS="xx=37" # white punctuation (symlink arrows, etc.)
 
+# Gum
+export GUM_INPUT_CURSOR_FOREGROUND="117"
+export GUM_INPUT_PLACEHOLDER_FOREGROUND="250"
+export GUM_INPUT_HEADER_FOREGROUND="250"
+export GUM_WRITE_CURSOR_FOREGROUND="117"
+export GUM_WRITE_PLACEHOLDER_FOREGROUND="250"
+export GUM_WRITE_HEADER_FOREGROUND="250"
+export GUM_FILTER_INDICATOR_FOREGROUND="117"
+export GUM_FILTER_SELECTED_PREFIX_FOREGROUND="117"
+export GUM_FILTER_MATCH_FOREGROUND="117"
+export GUM_FILTER_PLACEHOLDER_FOREGROUND="250"
+export GUM_CONFIRM_PROMPT_FOREGROUND="117"
+export GUM_CONFIRM_SELECTED_FOREGROUND="230"
+export GUM_CONFIRM_SELECTED_BACKGROUND="117"
+export GUM_INPUT_SHOW_HELP="false"
+export GUM_WRITE_SHOW_HELP="false"
+export GUM_FILTER_SHOW_HELP="false"
+export GUM_CONFIRM_SHOW_HELP="false"
+
 # Meta
 alias ezsh="code ~/.zshrc"
 alias rzsh="source ~/.zshrc"
@@ -69,11 +88,11 @@ alias big10="du -a -h ./ | sort -h -r | head -n 10" # show 10 largest files/dirs
 
 fkill () { # Fuzzy matching process murder
   local process pid
-  process=$(ps -ef | sed 1d | fzf -m)
+  process=$(ps -ef | sed 1d | gum filter --no-limit)
   if [ "$process" != "" ] ; then
     pid=$(echo "$process" | awk '{print $2}')
     echo "$pid" | xargs kill -"${1:-9}"
-    echo "$process"
+    gum log --level info "$process"
   fi
 }
 
@@ -86,46 +105,44 @@ killport () { # Kill process(es) on a given port
 
   local port=$1
   if [ -z "$port" ]; then
-    echo "Usage: killport [-f] <port>" >&2
+    gum log --level error "Usage: killport [-f] <port>"
     return 1
   fi
   if ! [ "$port" -eq "$port" ] 2>/dev/null; then
-    echo "killport: '$port' is not a valid port number" >&2
+    gum log --level error "'$port' is not a valid port number"
     return 1
   fi
 
   local pids
   pids=$(lsof -i :"$port" -t 2>/dev/null | sort -u)
   if [ -z "$pids" ]; then
-    echo "No process found on port $port."
+    gum log --level info "No process found on port $port."
     return 0
   fi
 
   echo ""
   printf "  %-8s %-16s %s\n" "PID" "COMMAND" "USER"
-  echo "$pids" | while read -r pid; do
+  while read -r p; do
     printf "  %-8s %-16s %s\n" \
-      "$pid" \
-      "$(ps -p "$pid" -o comm= 2>/dev/null)" \
-      "$(ps -p "$pid" -o user= 2>/dev/null)"
-  done
+      "$p" \
+      "$(ps -p "$p" -o comm= 2>/dev/null)" \
+      "$(ps -p "$p" -o user= 2>/dev/null)"
+  done <<< "$pids"
   echo ""
 
   local count
   count=$(echo "$pids" | wc -l | tr -d ' ')
-  printf "Kill %s process(es) on port %s? [y/N] " "$count" "$port"
-  read -r reply
-  if [ "$reply" = "y" ] || [ "$reply" = "Y" ]; then
+  if gum confirm "Kill $count process(es) on port $port?"; then
     echo "$pids" | xargs kill -"$signal" 2>/dev/null
-    echo "Killed $count process(es) on port $port."
+    gum log --level info "Killed $count process(es) on port $port."
   else
-    echo "Aborted."
+    gum log --level warn "Aborted."
   fi
 }
 
 emoji () { # Fuzzy match emoji printing
   local emojis selected_emoji
   emojis=$(curl -sSL 'https://git.io/JXXO7')
-  selected_emoji=$(echo "$emojis" | fzf)
+  selected_emoji=$(echo "$emojis" | gum filter)
   echo "$selected_emoji"
 }
