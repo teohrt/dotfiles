@@ -55,8 +55,11 @@ gbD () {
 }
 
 greset1 () {
-  # git reset
-  if gum confirm "Reset git history by one commit?"; then
+  printf "%s\n\nCommit Message:\n%s" \
+    "$(git log -1 --format="%h - %an, %ar")" \
+    "$(git log -1 --format="%B")" | gum style --border rounded --padding "0 1"
+  echo ""
+  if gum confirm --default=no "Reset this commit?"; then
     git reset HEAD~1
   else
     gum log --level warn "Aborting."
