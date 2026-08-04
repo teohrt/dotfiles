@@ -1,17 +1,82 @@
+# Facilitate gpg signing for git commits
+GPG_TTY=$(tty)
+export GPG_TTY
+
+# Aliases
 alias push="git push"
-alias pushF="git push --force"
 alias pull="git pull"
+alias gs="clear; git status"
+alias gl="git log"
+alias ga="git add . ; git status"
+alias unstage="git restore --staged ."
+
+# Functions
+pushF () {
+  # git force push
+  if gum confirm "Force push?"; then
+    git push --force
+  else
+    gum log --level warn "Aborting."
+  fi
+}
+
+gc () {
+  # git commit
+  git commit -m "$*"
+}
+
+gchB () {
+  # git checkout -B
+  local branch
+  branch=$(gum input --header "New branch name" --placeholder "...") || return
+  git checkout -B "$branch"
+}
+
+gch () {
+  # git checkout
+  local branches branch
+  branches=$(git --no-pager branch -vv) &&
+  branch=$(echo "$branches" | gum filter) || return
+  git checkout "$(echo "$branch" | awk '{print $1}' | sed "s/.* //")"
+}
+
+gbD () {
+  # git branch -D
+  local branches branchInfo branchName
+  branches=$(git --no-pager branch -vv) &&
+  branchInfo=$(echo "$branches" | gum filter) &&
+  branchName=$(echo "$branchInfo" | awk '{print $1}' | sed "s/.* //")
+
+  if gum confirm "Delete branch '$branchName'?"; then
+    git branch -D "$branchName"
+  else
+    gum log --level warn "Aborting."
+  fi
+}
+
+greset1 () {
+  printf "%s\n\nCommit Message:\n%s" \
+    "$(git log -1 --format="%h - %an, %ar")" \
+    "$(git log -1 --format="%B")" | gum style --border rounded --padding "0 1"
+  echo ""
+  if gum confirm --default=no "Reset this commit?"; then
+    git reset HEAD~1
+  else
+    gum log --level warn "Aborting."
+  fi
+}
+
 stash () {
   local msg
-  echo -n "Stash name: "
-  read -r msg
+  msg=$(gum input --placeholder "Stash name") || return
   git stash push --include-untracked -m "$msg"
 }
+
 pop () {
   local stashes selection index
   stashes=$(git stash list) || return
   if [ -z "$stashes" ]; then
-    echo "No stashes found."
+    gum log --level warn "No stashes found."
     return 1
   fi
   # shellcheck disable=SC2016
@@ -19,17 +84,8 @@ pop () {
   index=$(echo "$selection" | cut -d: -f1)
   git stash pop "$index"
 }
-alias gs="clear; git status"
-alias gl="git log"
-alias ga="git add . ; git status"
-alias gc="git commit -m "
-alias gchB="git checkout -B"
-alias unstage="git restore --staged ."
 
-GPG_TTY=$(tty) # facilitate gpg signing for git commits
-export GPG_TTY
-
-gh () { # open github branch specfic directory in web browser
+gh () {
   local branch origin repoURL repoName repoDirectory url
   branch=$(git rev-parse --abbrev-ref HEAD)
   origin=$(git config --get remote.origin.url)
@@ -39,36 +95,4 @@ gh () { # open github branch specfic directory in web browser
   repoDirectory=$(pwd | sed "s/.*$repoName//")
   url="$repoURL$repoDirectory"
   open "$url"
-}
-
-gbD () { # git branch delete with fuzzy matching
-  local branches branchInfo branchName
-  branches=$(git --no-pager branch -vv) &&
-  branchInfo=$(echo "$branches" | fzf +m) && 
-  branchName=$(echo "$branchInfo" | awk '{print $1}' | sed "s/.* //")
-
-  echo Type \'yes\' if you want to delete "$branchName"
-  read -r ans
-  if [ "$ans" = 'yes' ] ; then
-    git branch -D "$branchName"
-  else
-      echo Aborting.
-  fi
-}
-
-gch () { # checkout git branch with fuzzy matching
-  local branches branch
-  branches=$(git --no-pager branch -vv) &&
-  branch=$(echo "$branches" | fzf +m) &&
-  git checkout "$(echo "$branch" | awk '{print $1}' | sed "s/.* //")"
-}
-
-greset1 () {
-    echo Type \'yes\' if you want to reset your git history by one commit:
-    read -r ans
-    if [ "$ans" = 'yes' ] ; then
-        git reset HEAD~1
-    else
-        echo Aborting.
-    fi
 }
