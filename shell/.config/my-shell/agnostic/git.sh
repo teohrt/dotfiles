@@ -12,8 +12,16 @@ alias unstage="git restore --staged ."
 
 # Functions
 pushF () {
-  # git force push
-  if gum confirm "Force push?"; then
+    # git force push
+  local remote branch
+  remote=$(git remote)
+  branch=$(git rev-parse --abbrev-ref HEAD)
+  printf "%s → %s/%s\n\n%s" \
+    "$branch" "$remote" "$branch" \
+    "$(git log "$remote/$branch"..HEAD --oneline 2>/dev/null || echo "(new branch)")" \
+    | gum style --border rounded --padding "0 1"
+  echo ""
+  if gum confirm --default=no "Force push?"; then
     git push --force
   else
     gum log --level warn "Aborting."
@@ -37,17 +45,22 @@ gch () {
   local branches branch
   branches=$(git --no-pager branch -vv) &&
   branch=$(echo "$branches" | gum filter) || return
-  git checkout "$(echo "$branch" | awk '{print $1}' | sed "s/.* //")"
+  git checkout "$(echo "$branch" | sed 's/^[* ]*//' | awk '{print $1}')"
 }
 
 gbD () {
-  # git branch -D
+    # git branch -D
   local branches branchInfo branchName
   branches=$(git --no-pager branch -vv) &&
   branchInfo=$(echo "$branches" | gum filter) &&
-  branchName=$(echo "$branchInfo" | awk '{print $1}' | sed "s/.* //")
+  branchName=$(echo "$branchInfo" | sed 's/^[* ]*//' | awk '{print $1}')
 
-  if gum confirm "Delete branch '$branchName'?"; then
+  printf "%s\n\nLast Commit:\n%s" \
+    "$branchName" \
+    "$(git log -1 --format="%h - %s (%ar)" "$branchName")" \
+    | gum style --border rounded --padding "0 1"
+  echo ""
+  if gum confirm --default=no "Delete this branch?"; then
     git branch -D "$branchName"
   else
     gum log --level warn "Aborting."
