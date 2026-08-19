@@ -67,6 +67,38 @@ gbD () {
   fi
 }
 
+gbR () {
+  # git branch rename (local + remote if pushed)
+  local current newName tracking
+  current=$(git rev-parse --abbrev-ref HEAD)
+  newName=$(gum input --header "Rename branch '$current'" --placeholder "New branch name") || return
+  [ -z "$newName" ] && return
+
+  tracking=$(git for-each-ref --format='%(upstream:short)' "refs/heads/$current")
+  if [ -n "$tracking" ]; then
+    local remote remoteBranch
+    remote=$(echo "$tracking" | cut -d/ -f1)
+    remoteBranch=$(echo "$tracking" | cut -d/ -f2-)
+    printf "%s\n\nTracking: %s\n%s" \
+      "$current → $newName" \
+      "$tracking" \
+      "This will rename locally, push the new name, and delete '$remoteBranch' from '$remote'." \
+      | gum style --border rounded --padding "0 1" --border-foreground 214
+    echo ""
+    if ! gum confirm --default=no "Rename local and remote?"; then
+      gum log --level warn "Aborting."
+      return
+    fi
+    git branch -m "$newName"
+    git push "$remote" :"$remoteBranch" "$newName"
+    git push -u "$remote" "$newName"
+  else
+    git branch -m "$newName"
+  fi
+
+  gum log --level info "Renamed '$current' → '$newName'"
+}
+
 greset1 () {
   printf "%s\n\nCommit Message:\n%s" \
     "$(git log -1 --format="%h - %an, %ar")" \
