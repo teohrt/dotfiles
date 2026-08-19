@@ -42,10 +42,19 @@ gchB () {
 
 gch () {
   # git checkout
-  local branches branch
+  local branches branch branchName
   branches=$(git --no-pager branch -vv) &&
   branch=$(echo "$branches" | gum filter) || return
-  git checkout "$(echo "$branch" | sed 's/^[* ]*//' | awk '{print $1}')"
+  branchName=$(echo "$branch" | sed 's/^[*+ ]*//' | awk '{print $1}')
+
+  if echo "$branch" | command grep -q '^+'; then
+    local worktreePath
+    worktreePath=$(git worktree list | command grep -F "[$branchName]" | awk '{print $1}')
+    gum log --level error "'$branchName' is already used by worktree at '$worktreePath'"
+    return 1
+  fi
+
+  git checkout "$branchName"
 }
 
 gbD () {
@@ -53,7 +62,14 @@ gbD () {
   local branches branchInfo branchName
   branches=$(git --no-pager branch -vv) &&
   branchInfo=$(echo "$branches" | gum filter) &&
-  branchName=$(echo "$branchInfo" | sed 's/^[* ]*//' | awk '{print $1}')
+  branchName=$(echo "$branchInfo" | sed 's/^[*+ ]*//' | awk '{print $1}')
+
+  if echo "$branchInfo" | grep -q '^+'; then
+    local worktreePath
+    worktreePath=$(git worktree list | command grep -F "[$branchName]" | awk '{print $1}')
+    gum log --level error "Cannot delete branch '$branchName' used by worktree at '$worktreePath'"
+    return 1
+  fi
 
   printf "%s\n\nLast Commit:\n%s" \
     "$branchName" \
