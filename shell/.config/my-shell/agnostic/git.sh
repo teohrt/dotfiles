@@ -64,7 +64,7 @@ gbD () {
   branchInfo=$(echo "$branches" | gum filter) &&
   branchName=$(echo "$branchInfo" | sed 's/^[*+ ]*//' | awk '{print $1}')
 
-  if echo "$branchInfo" | grep -q '^+'; then
+  if echo "$branchInfo" | command grep -q '^+'; then
     local worktreePath
     worktreePath=$(git worktree list | command grep -F "[$branchName]" | awk '{print $1}')
     gum log --level error "Cannot delete branch '$branchName' used by worktree at '$worktreePath'"
