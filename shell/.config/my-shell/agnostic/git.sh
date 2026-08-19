@@ -19,7 +19,7 @@ pushF () {
   printf "%s → %s/%s\n\n%s" \
     "$branch" "$remote" "$branch" \
     "$(git log "$remote/$branch"..HEAD --oneline 2>/dev/null || echo "(new branch)")" \
-    | gum style --border rounded --padding "0 1"
+    | gum style --border rounded --padding "0 1" --border-foreground 214
   echo ""
   if gum confirm --default=no "Force push?"; then
     git push --force
@@ -58,7 +58,7 @@ gbD () {
   printf "%s\n\nLast Commit:\n%s" \
     "$branchName" \
     "$(git log -1 --format="%h - %s (%ar)" "$branchName")" \
-    | gum style --border rounded --padding "0 1"
+    | gum style --border rounded --padding "0 1" --border-foreground 214
   echo ""
   if gum confirm --default=no "Delete this branch?"; then
     git branch -D "$branchName"
@@ -102,7 +102,7 @@ gbR () {
 greset1 () {
   printf "%s\n\nCommit Message:\n%s" \
     "$(git log -1 --format="%h - %an, %ar")" \
-    "$(git log -1 --format="%B")" | gum style --border rounded --padding "0 1"
+    "$(git log -1 --format="%B")" | gum style --border rounded --padding "0 1" --border-foreground 214
   echo ""
   if gum confirm --default=no "Reset this commit?"; then
     git reset HEAD~1
