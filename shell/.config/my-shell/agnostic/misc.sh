@@ -154,3 +154,7 @@ emoji () {
   selected_emoji=$(echo "$emojis" | gum filter)
   echo "$selected_emoji"
 }
+
+ipinfo () {
+  curl -s https://ipinfo.io | jq
+}
