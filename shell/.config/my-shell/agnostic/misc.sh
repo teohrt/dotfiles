@@ -158,3 +158,36 @@ emoji () {
 ipinfo () {
   curl -s https://ipinfo.io | jq
 }
+
+tmux-sessions () {
+  local action
+  action=$(gum choose "attach" "create" "rename" "delete")
+  [ -z "$action" ] && return 0
+
+  case "$action" in
+    create)
+      local name
+      name=$(gum input --placeholder "Session name...")
+      [ -n "$name" ] && tmux new-session -d -s "$name" && tmux switch-client -t "$name"
+      ;;
+    attach|rename|delete)
+      local sessions selected
+      sessions=$(tmux list-sessions -F "#S" 2>/dev/null)
+      if [ -z "$sessions" ]; then
+        gum log --level warn "No tmux sessions"
+        return 0
+      fi
+      selected=$(echo "$sessions" | gum filter --placeholder "Select session...")
+      [ -z "$selected" ] && return 0
+      case "$action" in
+        attach) tmux switch-client -t "$selected" ;;
+        rename)
+          local newname
+          newname=$(gum input --placeholder "New name..." --value "$selected")
+          [ -n "$newname" ] && tmux rename-session -t "$selected" "$newname"
+          ;;
+        delete) gum confirm "Delete session '$selected'?" --default=false && tmux kill-session -t "$selected" ;;
+      esac
+      ;;
+  esac
+}
