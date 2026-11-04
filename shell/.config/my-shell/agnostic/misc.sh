@@ -69,6 +69,10 @@ export GUM_INPUT_SHOW_HELP="false"
 export GUM_WRITE_SHOW_HELP="false"
 export GUM_FILTER_SHOW_HELP="false"
 export GUM_CONFIRM_SHOW_HELP="false"
+export GUM_CHOOSE_CURSOR_FOREGROUND="117"
+export GUM_CHOOSE_SELECTED_FOREGROUND="117"
+export GUM_CHOOSE_HEADER_FOREGROUND="250"
+export GUM_CHOOSE_SHOW_HELP="false"
 
 # Replaces fzf grep with ripgrep when STDIN pipe isn't provided - makes fzf faster
 export FZF_DEFAULT_COMMAND='rg --files --hidden --no-require-git --follow --glob "!.git/*"'

@@ -1,0 +1,12 @@
+agent: claude
+merge_strategy: merge
+nerdfont: true
+mode: session
+
+post_create:
+  - direnv allow
+
+panes:
+  - command: <agent>
+    focus: true
+  - split: horizontal
