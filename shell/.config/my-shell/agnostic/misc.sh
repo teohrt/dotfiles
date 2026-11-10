@@ -165,7 +165,7 @@ ipinfo () {
 
 tmux-sessions () {
   local action
-  action=$(gum choose "attach" "create" "rename" "delete")
+  action=$(gum choose --header "Choose tmux session option..." "attach" "create" "rename" "delete")
   [ -z "$action" ] && return 0
 
   case "$action" in
