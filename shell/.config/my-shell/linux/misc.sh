@@ -18,6 +18,18 @@ alias open="xdg-open"
 alias showip="ip route get 1.1.1.1 2>/dev/null | grep -oP 'src \K\S+'"
 showmac() { ip link show "$(ip route | grep default | awk '{print $5}' | head -1)" 2>/dev/null | grep -oP '(?<=link/ether\s)\S+'; }
 
+wifipwd () {
+    local network
+    network=$1
+    if [ "$network" = "" ] ; then
+      network=$(nmcli -t -f NAME,TYPE connection show | awk -F: '$2 == "802-11-wireless" {print $1}' | fzf)
+    fi
+    if [ "$network" != "" ] ; then
+      echo "Network: $network"
+      nmcli -s -g 802-11-wireless-security.psk connection show "$network"
+    fi
+}
+
 # alias nrs="cd /home/trace/Dev/other/nixos/ && git pull && sudo nixos-rebuild switch --flake /home/trace/Dev/other/nixos#framework-16"
 # alias nrb="cd /home/trace/Dev/other/nixos/ && git pull && sudo nixos-rebuild boot --flake /home/trace/Dev/other/nixos#framework-16"
 # alias ncg="sudo nix-collect-garbage"

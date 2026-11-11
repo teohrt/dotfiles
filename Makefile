@@ -1,4 +1,4 @@
-.PHONY: stow-shell unstow-shell stow-git unstow-git stow-direnv unstow-direnv stow-all unstow-all
+.PHONY: stow-shell unstow-shell stow-git unstow-git stow-direnv unstow-direnv stow-tmux unstow-tmux stow-workmux unstow-workmux stow-all unstow-all
 
 stow-shell:
 	stow --target=$(HOME) shell
@@ -18,6 +18,18 @@ stow-direnv:
 unstow-direnv:
 	stow --target=$(HOME) --delete direnv
 
-stow-all: stow-shell stow-git stow-direnv
+stow-tmux:
+	stow --target=$(HOME) tmux
 
-unstow-all: unstow-shell unstow-git unstow-direnv
+unstow-tmux:
+	stow --target=$(HOME) --delete tmux
+
+stow-workmux:
+	stow --target=$(HOME) workmux
+
+unstow-workmux:
+	stow --target=$(HOME) --delete workmux
+
+stow-all: stow-shell stow-git stow-direnv stow-tmux stow-workmux
+
+unstow-all: unstow-shell unstow-git unstow-direnv unstow-tmux unstow-workmux
